@@ -5,3 +5,11 @@ First meeting with the group 25/04 (2 hours)
 Reading the study guide and started working on the RTC list (2 hours)
 Discussion of the project ideas, additional meeting 28/04 (1 hour)
 Finishing RTC list 30/04 (1 hour)
+
+
+Serkan Efe Durusu:
+Kick-Off Lecture 25/04 (2 hours)
+First meeting with the group 25/04 (2 hours)
+Downloading necessary software (1/2 hour)
+Discussion of the project ideas, additional meeting 28/04 (1 hour)
+Looking into ways to generate sound notes on Raspberry pi and testing in VS IDE (2.5 hours)
