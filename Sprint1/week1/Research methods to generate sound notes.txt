@@ -1,0 +1,55 @@
+Research methods to generate sound notes
+
+
+
+This will play an audio file but it won’t return until playing is complete:
+#include <stdlib.h>
+	system("omxplayer /home/pi/projects/my_project/audio/my_audio.wav");
+
+.wav file may thus work.
+
+Audio jack will probably be able to output audio.
+
+To generate tunes for C++: 
+	// Example of how to make different beep tones
+	// Beep(523,500); // 523 hertz (C5) for 500 milliseconds
+
+
+	// "Metallica : Harvester of Sorrow" Opening by DigiP
+	// Notes and their Frequencies
+	// http://www.phy.mtu.edu/~suits/notefreqs.html
+	// 329: E
+	// 493: B
+	// 698: F^
+	// 659: E^
+	// 783: G^
+
+	// 392: G
+	// 440: A
+	// 587: D
+	// 349: F
+
+#include <iostream>
+#include <windows.h> // WinApi header
+Int main() {
+	Beep(329, 300); //E
+	Beep(493, 300); //B
+	Beep(698, 300); //F^
+	Beep(659, 600); //E^
+
+	Beep(783, 300); //G^
+	Beep(698, 300); //F^
+	Beep(659, 600); //E^
+	Return 0;
+}
+Links:
+Coding a light bulb for rasp pi:
+https://www.youtube.com/watch?v=mshVdGlGwBs 
+C++ tunes:
+https://forums.hak5.org/topic/9298-music-in-c/ 
+Play audio on raspberry pi: 
+https://raspberry-projects.com/pi/programming-in-c/audio/playing-audio 
+Coding C++ on raspberry pi:
+https://raspberry-projects.com/pi/category/programming-in-c 
+Serkan Efe Durusu
+
