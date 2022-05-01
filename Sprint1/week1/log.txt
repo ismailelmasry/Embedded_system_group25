@@ -13,3 +13,10 @@ First meeting with the group 25/04 (2 hours)
 Downloading necessary software (1/2 hour)
 Discussion of the project ideas, additional meeting 28/04 (1 hour)
 Looking into ways to generate sound notes on Raspberry pi and testing in VS IDE (2.5 hours)
+
+
+Oktay Can Ismar:
+Kick-Off Lecture 25/04 (2 hours)
+First meeting with the group 25/04 (2 hours)
+Discussion of the project ideas, additional meeting 28/04 (1 hour)
+Doing research on gripping mechanisms, reaching out to other engineers to discuss the most optimal contraption for the project (3 hours)
