@@ -30,5 +30,6 @@ Metehan Topac:
 04/25/2022 : First meeting with the group (2 hours)
 04/27/2022 : Idea generation, research and reading the study guide (3 hours)
 04/28/2022 : Discussion of the project ideas, additional meeting (1 hour)
+05/01/2022 : Research on how to use L293D Motor Driver Shield (2 hours)
 
 
