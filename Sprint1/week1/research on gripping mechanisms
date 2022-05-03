@@ -1,0 +1,37 @@
+Do we need to buy an additional motor for the gripper? 
+
+We only need one motor for the gripper itself, however we might need an additional motor for the rest of the arm to
+control the rotation of the arm that carries the gripper. What really decides for this is the design of the robot itself. 
+
+If yes what would be a good mechanism for the design?  
+
+A 2-jaw angular gripper would be a good mechanism for our design. This type of gripper has two arms that can be controlled
+by only one stepper (servo) motor and is efficient and suitable enough to carry the disks, meanwhile also being cheap. We
+could also make it so that it allows space for the close-range sensor we have to put somewhere on the grip to check whether
+the disk is being gripped at the moment. 
+
+What is the current state of the art?  
+
+Current state of the art mechanisms for these types of applications would be pneumatic, electric, vacuum or hydraulic grippers.
+There are many other types of mechanisms although most of them are made for heavy duty and are used for industrial work which is
+outside of the scope of this research. 
+
+What is possible to create with lego? 
+
+The 2-jaw angular gripper explained above is possible to create with lego by simply using gears and hinges or only using hinges.
+Although I would recommend going with gears so we reduce the cases of random error. It shouldn’t be that hard of a task. 
+
+Extra Idea: 
+
+Instead of using a gripper that utilizes jaws, it could also be optimal to use a suction cup vacuum pump that work with servos.
+Since the disks’ shape is suitable because the top and bottom surfaces are completely flat, suction cups could easily stick to
+and displace them. It could also help with space optimization as well. Although this approach is rather expensive (just about
+enough to be over the budget) and ambiguous compared to the default approach that we already have. 
+
+Links:
+
+Pneumatic grippers (https://in.omega.com/prodinfo/grippers.html)
+State of the art grippers (https://www.universal-robots.com/blog/types-of-grippers-used-in-manufacturing/)
+Suction Cup Vacuum Pump (https://www.ebay.com/itm/174122284695)
+
+Oktay Can Ismar
