@@ -1,0 +1,25 @@
+Documentation about the;
+Optic sensor:
+
+Name: Phote Resistor Ldr 03
+Model: 32698
+
+Product description: The LDR 03, an analog photo resistor, reacts to daylight by changing its resistance value. This is an indicator of the light's brightness.
+
+dimensions: 15x15x15 mm
+weight: 2.8 gram
+R 10 ; 3-11 kilo-ohm
+R 100 ; 1.2 kilo-ohm
+wavelength: 600nm
+
+signal: resistor value: 1.2 kilo ohm at 100 Lux and wavelength 600 nm
+connections: 2 connector for fischertechnik plugs 2.5 mm
+
+connection to TXT Controller at inputs I1-I8, input mode:Analogue 5 kilo ohm
+
+
+video on connection LDR with arduino:
+https://www.youtube.com/watch?v=qKku-mmwNIA
+
+https://create.arduino.cc/projecthub/pratham_bhomkar/ldr-based-human-counter-80ac27
+https://create.arduino.cc/projecthub/tarantula3/using-an-ldr-sensor-with-arduino-807b1c
