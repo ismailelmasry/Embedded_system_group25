@@ -1,0 +1,22 @@
+error recognition handguide
+
+-led on
+	-> no disk detected
+
+-led blinks fast 3 times
+	-> disk detected but no disk color detected
+
+-led on and a fast sirene goes on
+	-> sensors blocked
+
+-led blinks slow 5 times and fast sirene goes on
+	-> pusher is stuck
+
+-led blinks fast 5 times and fast sirene goes on
+	->grabber is stuck
+
+-led blinks very fast 10 times and slow sirene goes on
+	-> the buffer zone is full
+
+-led of sirene of
+	-> no error
