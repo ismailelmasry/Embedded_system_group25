@@ -34,6 +34,14 @@ void loop() {
 
 }
 
+void runServo(int val){
+  servo.attach(Servo_PWM);
+  servo.write(val);
+  delay(1000);
+  servo.detach();
+  delay(500);
+  }
+
 void MoveToDefaultPosition(){
   servoBase.write(0);
   delay(300);
