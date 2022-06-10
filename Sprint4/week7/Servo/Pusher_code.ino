@@ -33,10 +33,12 @@ void setup() {
 }
 
 void loop() {
-  if (!digitalRead(pin_sensor1) && !platform){ //for when the sensor detects something and the platform doesnt have a disk
-    pusher(); 
-  }
-  else if(!digitalRead(pin_sensor1) && platform){ //for when the sensor detects something and the platform has a disk
-    disk_not_used++;
-  }
+
+  
+//  if (!digitalRead(pin_sensor1) && !platform){ //for when the sensor detects something and the platform doesnt have a disk
+//    pusher(); 
+//  }
+//  else if(!digitalRead(pin_sensor1) && platform){ //for when the sensor detects something and the platform has a disk
+//    disk_not_used++;
+//  }
 }
