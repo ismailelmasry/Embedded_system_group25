@@ -13,7 +13,7 @@ const int baseSwitch = A4;
 
 //those value need to be filled 
 int baseBufferToSlideDelay = 3000;
-int ArmUpAngle = 0;
+int ArmUpAngle = 180;
 int ArmDownAngle = 0;
 
 bool controlVal = true;
@@ -26,8 +26,9 @@ void setup() {
   pinMode(sensor2Pin, INPUT);
   pinMode(sensor3Pin, INPUT);
   pinMode(baseSwitch, INPUT);
-  servoBase.attach(7);
-  servoArmY.attach(8);
+  servoBase.attach(10);
+  servoArmY.attach(9);
+  servoArmY.write(ArmUpAngle);
   motor.setSpeed(200);
   motor.run(RELEASE);
   valSwitch = analogRead(baseSwitch);
@@ -35,28 +36,31 @@ void setup() {
 }
 
 void loop() {
-  PickUpAndDropDisk();
-  delay(100);
-  if(colorValueOfTheDisk != 0){
+  servoArmY.write(0);
+  delay(1000);
+  servoArmY.write(180);
+  delay(1000);
+  //PickUpAndDropDisk();
+  /*if(colorValueOfTheDisk != 0){
     if(colorValueOfTheDisk < 200){
       Serial.println("white");
     } else{
       Serial.println("black");  
     }
-  }
+  }*/
   
-  exit(0);
+  //exit(0);
 
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void closeGripper(){
-  motor.run(FORWARD);
-  delay(1000);
+  motor.run(BACKWARD);
+  delay(1130);
   motor.run(RELEASE);
   }
 
 void openGripper(){
-  motor.run(BACKWARD);
+  motor.run(FORWARD);
   delay(1000);
   motor.run(RELEASE);
   }
@@ -96,31 +100,33 @@ void findAndStopAtBufferZone(){
     controlVal = false;
     return;
   }else if (valSwitch <= 50){
-    servoBase.writeMicroseconds(2000);
+    servoBase.writeMicroseconds(1750);
     delay(50);
     findAndStopAtBufferZone();
   }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void MoveToDefaultPosition(){
-  findAndStopAtBufferZone();
-  delay(300);
   servoArmY.write(ArmUpAngle);
   delay(300);
+  findAndStopAtBufferZone();
+  delay(300);
+  
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void PickUpAndDropDisk(){
   MoveToDefaultPosition(); // base towards buffer zone and arm up 
   //Picks up the disk from buffer zone
   openGripper();
-  delay(300);
+  delay(1000);
   servoArmY.write(ArmDownAngle);
-  delay(300);
+  delay(1000);
   closeGripper();
-  delay(300);
+  delay(1000);
   colorValueOfTheDisk = analogRead(sensor2Pin);
   servoArmY.write(ArmUpAngle);
   delay(300);
+  Serial.println("go to slide");
   moveBaseServo(baseBufferToSlideDelay, "clockwise");
   delay(300);
   servoArmY.write(ArmDownAngle);
@@ -128,5 +134,9 @@ void PickUpAndDropDisk(){
   openGripper();
   delay(500);
   controlVal = true;
-  MoveToDefaultPosition();  
+  //MoveToDefaultPosition();  
 }
+
+void test(){
+  MoveToDefaultPosition();
+  }
