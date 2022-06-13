@@ -35,11 +35,10 @@ void setup() {
 
 }
 
+
+
 void loop() {
-  servoArmY.write(0);
-  delay(1000);
-  servoArmY.write(180);
-  delay(1000);
+  testArmServo();
   //PickUpAndDropDisk();
   /*if(colorValueOfTheDisk != 0){
     if(colorValueOfTheDisk < 200){
@@ -49,9 +48,17 @@ void loop() {
     }
   }*/
   
-  //exit(0);
+  //exit(0); // kill the loop
 
 }
+
+void testArmServo(){
+  servoArmY.write(0);
+  delay(1000);
+  servoArmY.write(180);
+  delay(1000);
+  }
+  
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void closeGripper(){
   motor.run(BACKWARD);
@@ -136,7 +143,3 @@ void PickUpAndDropDisk(){
   controlVal = true;
   //MoveToDefaultPosition();  
 }
-
-void test(){
-  MoveToDefaultPosition();
-  }
