@@ -13,8 +13,8 @@ const int baseSwitch = A4;
 
 //those value need to be filled 
 int baseBufferToSlideDelay = 3000;
-int ArmUpAngle = 180;
-int ArmDownAngle = 0;
+int ArmUpAngle = 0;
+int ArmDownAngle = 70;
 
 bool controlVal = true;
 int valSwitch;
@@ -38,8 +38,7 @@ void setup() {
 
 
 void loop() {
-  testArmServo();
-  //PickUpAndDropDisk();
+  PickUpAndDropDisk();
   /*if(colorValueOfTheDisk != 0){
     if(colorValueOfTheDisk < 200){
       Serial.println("white");
@@ -48,27 +47,27 @@ void loop() {
     }
   }*/
   
-  //exit(0); // kill the loop
+  exit(0); // kill the loop
 
 }
 
 void testArmServo(){
-  servoArmY.write(0);
-  delay(1000);
-  servoArmY.write(180);
-  delay(1000);
+  servoArmY.write(ArmUpAngle);
+  delay(2000);
+  servoArmY.write(ArmDownAngle);
+  delay(2000);
   }
   
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void closeGripper(){
-  motor.run(BACKWARD);
-  delay(1130);
+  motor.run(FORWARD);
+  delay(500);
   motor.run(RELEASE);
   }
 
 void openGripper(){
-  motor.run(FORWARD);
-  delay(1000);
+  motor.run(BACKWARD);
+  delay(500);
   motor.run(RELEASE);
   }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -102,12 +101,12 @@ void findAndStopAtBufferZone(){
     }
   Serial.println(valSwitch);
   delay(50);
-  if(valSwitch > 50){
+  if(valSwitch > 100){
     servoBase.writeMicroseconds(1500);
     controlVal = false;
     return;
-  }else if (valSwitch <= 50){
-    servoBase.writeMicroseconds(1750);
+  }else if (valSwitch <= 100){
+    servoBase.writeMicroseconds(1300);
     delay(50);
     findAndStopAtBufferZone();
   }
@@ -136,10 +135,13 @@ void PickUpAndDropDisk(){
   Serial.println("go to slide");
   moveBaseServo(baseBufferToSlideDelay, "clockwise");
   delay(300);
-  servoArmY.write(ArmDownAngle);
-  delay(300);
   openGripper();
   delay(500);
+  closeGripper();
   controlVal = true;
-  //MoveToDefaultPosition();  
+  //MoveToDefaultPosition();
 }
+
+void fixWire(){
+  moveBaseServo(80000, "clockwise");
+  }
