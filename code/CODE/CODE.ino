@@ -102,18 +102,18 @@ const int sensor3Pin = A3; // Buffer
 const int baseSwitch = A4;
 const int buzzer = 11;
 String binaryPattern = "";
-const int counter = 0;
 
 //those value need to be filled 
 int baseBufferToSlideDelay = 3500;
 int ArmUpAngle = 0;
-int ArmDownAngle = 70;
+int ArmDownAngle = 80;
 
 bool controlVal = true;
 int valSwitch;
 int colorValueOfTheDiskGripper = 0;
 int colorValueOfTheDiskBuffer = 0;
 String response;
+int counter = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -153,14 +153,32 @@ void loop() {
     }
   }
   if(binaryPattern.length() == 8 || counter == 10){ // if slider is full or if there is no disk in the buffer for 30 secs
-    int decimal = BinaryToDecimal(binaryPattern);
+    if(binaryPattern != ""){
+    char binary[binaryPattern.length() + 1];
+    binaryPattern.toCharArray(binary, binaryPattern.length() + 1);
+    int decimal = BinaryToDecimal(binary);
     if((decimal % 3) == 0){
-    PlayMelody1();
+    Serial.println("melody1");
+    //PlayMelody1();
+    delay(3000);
+    exit(0);
     }else if((decimal % 3) == 1){
-    PlayMelody2();
+    Serial.println("melody2");
+    //PlayMelody2();
+    delay(3000);
+    exit(0);
     }else if((decimal % 3) == 2){
-    PlayMelody3();
+    Serial.println("melody3");
+    //PlayMelody3();
+    delay(3000);
+    exit(0);
     }
+    }else {
+      Serial.println("There was no input at all so no melody to you!");
+      delay(3000);
+      exit(0);
+    }
+    
   }
   
   
@@ -187,13 +205,13 @@ void testArmServo(){
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void closeGripper(){
   motor.run(FORWARD);
-  delay(600);
+  delay(1100);
   motor.run(RELEASE);
   }
 
 void openGripper(){
   motor.run(BACKWARD);
-  delay(600);
+  delay(1000);
   motor.run(RELEASE);
   }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -232,7 +250,7 @@ void findAndStopAtBufferZone(){
     controlVal = false;
     return;
   }else if (valSwitch <= 100){
-    servoBase.writeMicroseconds(1400);
+    servoBase.writeMicroseconds(1350);
     delay(50);
     findAndStopAtBufferZone();
   }
@@ -262,6 +280,7 @@ void PickUpAndDropDisk(){
   colorValueOfTheDiskGripper = analogRead(sensor2Pin);
   if(colorValueOfTheDiskGripper > 100 && colorValueOfTheDiskGripper < 700){
     Serial.println("The gripper couldn't get the disk! Retrying...");
+    controlVal = true;
     return;
   }
   delay(300);
@@ -269,6 +288,7 @@ void PickUpAndDropDisk(){
   delay(500);
   closeGripper();
   controlVal = true;
+  
 }
 
 void fixWire(){
