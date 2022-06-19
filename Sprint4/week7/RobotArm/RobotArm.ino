@@ -14,7 +14,7 @@ const int baseSwitch = A4;
 //those value need to be filled 
 int baseBufferToSlideDelay = 3000;
 int ArmUpAngle = 0;
-int ArmDownAngle = 70;
+int ArmDownAngle = 90;
 
 bool controlVal = true;
 int valSwitch;
@@ -35,10 +35,9 @@ void setup() {
 
 }
 
-
-
 void loop() {
-  PickUpAndDropDisk();
+  fixWire();
+  //PickUpAndDropDisk();
   /*if(colorValueOfTheDisk != 0){
     if(colorValueOfTheDisk < 200){
       Serial.println("white");
@@ -47,7 +46,7 @@ void loop() {
     }
   }*/
   
-  exit(0); // kill the loop
+  // kill the loop
 
 }
 
@@ -100,7 +99,7 @@ void findAndStopAtBufferZone(){
     valSwitch = analogRead(baseSwitch);
     }
   Serial.println(valSwitch);
-  delay(50);
+  delay(10);
   if(valSwitch > 100){
     servoBase.writeMicroseconds(1500);
     controlVal = false;
@@ -139,9 +138,9 @@ void PickUpAndDropDisk(){
   delay(500);
   closeGripper();
   controlVal = true;
-  //MoveToDefaultPosition();
+  //MoveToDefaultPosition();  
 }
 
 void fixWire(){
-  moveBaseServo(80000, "clockwise");
+  servoBase.writeMicroseconds(2000);
   }

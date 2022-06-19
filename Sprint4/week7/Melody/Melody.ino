@@ -3,7 +3,7 @@ const int sensor1Pin = A1;
 const int sensor2Pin = A2;
 const int sensor3Pin = A3;
 const int buzzer = 11;
-String binaryPattern = "";
+char binaryPattern = "";
 #define NOTE_B0  31
 #define NOTE_C1  33
 #define NOTE_CS1 35
