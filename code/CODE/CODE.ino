@@ -94,6 +94,7 @@
 Servo servoBase;
 Servo servoArmY;
 AF_DCMotor motor(4); // Gripper
+AF_DCMotor motor2(2); // Pusher
 bool gripped = false;
 
 const int sensor1Pin = A1; // Pusher
@@ -112,6 +113,7 @@ bool controlVal = true;
 int valSwitch;
 int colorValueOfTheDiskGripper = 0;
 int colorValueOfTheDiskBuffer = 0;
+int colorValueOfTheDiskPusher = 0;
 String response;
 int counter = 0;
 
@@ -125,16 +127,20 @@ void setup() {
   servoArmY.attach(9);
   servoArmY.write(ArmUpAngle);
   motor.setSpeed(200);
+  motor2.setSpeed(200);
   motor.run(RELEASE);
+  motor2.run(RELEASE);
   valSwitch = analogRead(baseSwitch);
 
 }
 
+//Third fault detection: the pusher pushes the disk but it doesnt go the buffer zone!
 void loop() {
   delay(2000);
   colorValueOfTheDiskBuffer = analogRead(sensor3Pin);
-  Serial.println(colorValueOfTheDiskBuffer);
+  colorValueOfTheDiskPusher = analogRead(sensor1Pin);
   delay(100);
+  //Pusher code here (to be updated)
   if(colorValueOfTheDiskBuffer <= 987 && colorValueOfTheDiskBuffer > 500){
     Serial.println("There is no disk in the buffer!");
     counter++;
@@ -180,9 +186,6 @@ void loop() {
     }
     
   }
-  
-  
-  //exit(0);
 
 }
 
@@ -200,6 +203,14 @@ void testArmServo(){
   delay(2000);
   servoArmY.write(ArmDownAngle);
   delay(2000);
+  }
+
+void Push(){
+  motor2.run(FORWARD);
+  delay(1000);
+  motor2.run(BACKWARD);
+  delay(1000);
+  motor2.run(RELEASE);
   }
   
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
