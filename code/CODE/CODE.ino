@@ -94,7 +94,7 @@
 Servo servoBase;
 Servo servoArmY;
 AF_DCMotor motor(4); // Gripper
-AF_DCMotor motor2(2); // Pusher
+AF_DCMotor motor2(3); // Pusher
 bool gripped = false;
 
 const int sensor1Pin = A1; // Pusher
@@ -102,6 +102,7 @@ const int sensor2Pin = A2; // Gripper
 const int sensor3Pin = A3; // Buffer
 const int baseSwitch = A4;
 const int buzzer = 11;
+const int LED = 13;
 String binaryPattern = "";
 
 //those value need to be filled 
@@ -114,6 +115,10 @@ int valSwitch;
 int colorValueOfTheDiskGripper = 0;
 int colorValueOfTheDiskBuffer = 0;
 int colorValueOfTheDiskPusher = 0;
+int bufferVal;
+int gripperVal;
+int pusherVal;
+bool push = false;
 String response;
 int counter = 0;
 
@@ -123,6 +128,8 @@ void setup() {
   pinMode(sensor2Pin, INPUT);
   pinMode(sensor3Pin, INPUT);
   pinMode(baseSwitch, INPUT);
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, LOW);
   servoBase.attach(10);
   servoArmY.attach(9);
   servoArmY.write(ArmUpAngle);
@@ -136,21 +143,34 @@ void setup() {
 
 //Third fault detection: the pusher pushes the disk but it doesnt go the buffer zone!
 void loop() {
-  delay(2000);
-  colorValueOfTheDiskBuffer = analogRead(sensor3Pin);
-  colorValueOfTheDiskPusher = analogRead(sensor1Pin);
-  delay(100);
+  delay(500);
+  digitalWrite(LED, LOW);
+  pusherVal = GetColorPusher();
+  if(pusherVal != 2 && push == true){
+    Serial.println("PUSH!");
+    Push();
+    delay(3000);
+    bufferVal = GetColorBuffer();
+    if(bufferVal == 2){
+      Serial.println("Disk went to somewhere else other than buffer zone!");
+      digitalWrite(LED, HIGH);
+      delay(1000);
+      digitalWrite(LED, LOW);
+      }
+    }
   //Pusher code here (to be updated)
-  if(colorValueOfTheDiskBuffer <= 987 && colorValueOfTheDiskBuffer > 500){
+  bufferVal = GetColorBuffer();
+  if(bufferVal == 2){
     Serial.println("There is no disk in the buffer!");
+    push = true;
     counter++;
   }else {
     PickUpAndDropDisk();
-    if(colorValueOfTheDiskGripper < 100){
+    if(gripperVal == 1){
       Serial.println("black");
       counter = 0;
       binaryPattern = binaryPattern + "1";
-    } else if (colorValueOfTheDiskGripper > 700){
+    } else if (gripperVal == 0){
       Serial.println("white");
       counter = 0;
       binaryPattern = binaryPattern + "0";
@@ -158,30 +178,41 @@ void loop() {
       Serial.println("none");  
     }
   }
-  if(binaryPattern.length() == 8 || counter == 10){ // if slider is full or if there is no disk in the buffer for 30 secs
+  if(binaryPattern.length() == 8 || counter == 60){ // if slider is full or if there is no disk in the buffer for 30 secs
     if(binaryPattern != ""){
     char binary[binaryPattern.length() + 1];
     binaryPattern.toCharArray(binary, binaryPattern.length() + 1);
     int decimal = BinaryToDecimal(binary);
     if((decimal % 3) == 0){
     Serial.println("melody1");
-    //PlayMelody1();
+    PlayMelody1();
     delay(3000);
     exit(0);
     }else if((decimal % 3) == 1){
     Serial.println("melody2");
-    //PlayMelody2();
+    PlayMelody2();
     delay(3000);
     exit(0);
     }else if((decimal % 3) == 2){
     Serial.println("melody3");
-    //PlayMelody3();
+    PlayMelody3();
     delay(3000);
     exit(0);
     }
     }else {
       Serial.println("There was no input at all so no melody to you!");
-      delay(3000);
+      digitalWrite(LED, HIGH);
+      delay(300);
+      digitalWrite(LED, LOW);
+      delay(300);
+      digitalWrite(LED, HIGH);
+      delay(300);
+      digitalWrite(LED, LOW);
+      delay(300);
+      digitalWrite(LED, HIGH);
+      delay(300);
+      digitalWrite(LED, LOW);
+      delay(2000);
       exit(0);
     }
     
@@ -198,6 +229,53 @@ int BinaryToDecimal(char *binary) {
   return result;
 }
 
+int GetColorBuffer(){
+  colorValueOfTheDiskBuffer = analogRead(sensor3Pin);
+  Serial.print("Value on the Buffer : ");
+  Serial.println(colorValueOfTheDiskBuffer);
+  delay(300);
+  if(colorValueOfTheDiskBuffer >= 970 && colorValueOfTheDiskBuffer <= 990){
+    return 2; //none
+    }
+  if(colorValueOfTheDiskBuffer > 990){
+    return 0; //white
+    }
+  if(colorValueOfTheDiskBuffer < 800){
+    return 1; //black
+    }
+}
+
+int GetColorGripper(){
+  colorValueOfTheDiskGripper = analogRead(sensor2Pin);
+  Serial.print("Value on the Gripper : ");
+  Serial.println(colorValueOfTheDiskGripper);
+  delay(300);
+  if(colorValueOfTheDiskGripper > 100 && colorValueOfTheDiskGripper < 900){
+    return 2; //none
+    }
+  if(colorValueOfTheDiskGripper > 900){
+    return 0; //white
+    }
+  if(colorValueOfTheDiskGripper <= 100){
+    return 1; //black
+    }
+}
+
+int GetColorPusher(){
+  colorValueOfTheDiskPusher = analogRead(sensor1Pin);
+  Serial.print("Value on the Pusher : ");
+  Serial.println(colorValueOfTheDiskPusher);
+  if(colorValueOfTheDiskPusher > 130 && colorValueOfTheDiskPusher < 900){
+    return 2; //none
+    }
+  if(colorValueOfTheDiskPusher > 900){
+    return 0; //white
+    }
+  if(colorValueOfTheDiskPusher <= 130){
+    return 1; //black
+    }
+}
+
 void testArmServo(){
   servoArmY.write(ArmUpAngle);
   delay(2000);
@@ -207,9 +285,11 @@ void testArmServo(){
 
 void Push(){
   motor2.run(FORWARD);
-  delay(1000);
+  delay(500);
+  motor2.run(RELEASE);
+  delay(2000);
   motor2.run(BACKWARD);
-  delay(1000);
+  delay(500);
   motor2.run(RELEASE);
   }
   
@@ -256,11 +336,11 @@ void findAndStopAtBufferZone(){
     }
   Serial.println(valSwitch);
   delay(100);
-  if(valSwitch > 100){
+  if(valSwitch > 150){
     servoBase.writeMicroseconds(1500);
     controlVal = false;
     return;
-  }else if (valSwitch <= 100){
+  }else if (valSwitch <= 150){
     servoBase.writeMicroseconds(1350);
     delay(50);
     findAndStopAtBufferZone();
@@ -276,6 +356,7 @@ void MoveToDefaultPosition(){
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
 void PickUpAndDropDisk(){
+  push = false;
   MoveToDefaultPosition(); // base towards buffer zone and arm up 
   //Picks up the disk from buffer zone
   openGripper();
@@ -288,12 +369,28 @@ void PickUpAndDropDisk(){
   delay(300);
   Serial.println("go to slide");
   moveBaseServo(baseBufferToSlideDelay, "clockwise");
-  colorValueOfTheDiskGripper = analogRead(sensor2Pin);
-  if(colorValueOfTheDiskGripper > 100 && colorValueOfTheDiskGripper < 700){
-    Serial.println("The gripper couldn't get the disk! Retrying...");
+  delay(100);
+  gripperVal = GetColorGripper();
+  int newBufferVal = GetColorBuffer();
+  if(gripperVal == 2 && newBufferVal != 2){
+    Serial.println("The gripper couldn't get the disk! Retrying... OR something went wrong!");
+    digitalWrite(LED, HIGH);
+    delay(1000);
     controlVal = true;
     return;
-  }
+  }else if(gripperVal == 2 && newBufferVal == 2){
+    Serial.println("The gripper dropped the disk in between the buffer zone and the slider!");
+    digitalWrite(LED, HIGH);
+    delay(1000);
+    controlVal = true;
+    return;
+    } else if(gripperVal == 2 && bufferVal != 2 && newBufferVal == 2){
+      Serial.println("Sensor in the gripper mulfunction most likely!");
+      digitalWrite(LED, HIGH);
+      delay(1000);
+      controlVal = true;
+      return;
+      }
   delay(300);
   openGripper();
   delay(500);

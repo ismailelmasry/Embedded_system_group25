@@ -1,7 +1,8 @@
 // Pusher = A1
 // Gripper = A2
 // Buffer = A3
-int sensorPin = A3;
+// Swtich = A4
+int sensorPin = A1;
 void setup() {
   Serial.begin(9600);
   pinMode(sensorPin, INPUT);
@@ -9,14 +10,14 @@ void setup() {
 }
 
 //Buffer
-// less than 987 = none 
-// more than 988 = white
-// less than 500 = black
+// more than 983 = none 
+// more than 993 = white
+// less than 700 = black
 
 //Gripper
-//more than 700 = white
+//more than 900 = white
 //less than 100 = black
-//100 < x < 700 = nothing
+//100 < x < 900 = nothing
 
 //Pusher
 //more than ? = white
