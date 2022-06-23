@@ -100,7 +100,7 @@ bool gripped = false;
 const int sensor1Pin = A1; // Pusher
 const int sensor2Pin = A2; // Gripper
 const int sensor3Pin = A3; // Buffer
-const int baseSwitch = A4;
+const int baseSwitch = A5;
 const int buzzer = 11;
 const int LED = 13;
 String binaryPattern = "";
@@ -118,7 +118,7 @@ int colorValueOfTheDiskPusher = 0;
 int bufferVal;
 int gripperVal;
 int pusherVal;
-bool push = false;
+bool push = true;
 String response;
 int counter = 0;
 
@@ -145,21 +145,28 @@ void setup() {
 void loop() {
   delay(500);
   digitalWrite(LED, LOW);
+  //PusherCode();
+  ArmCode();
+}
+
+void PusherCode(){
   pusherVal = GetColorPusher();
   if(pusherVal != 2 && push == true){
     Serial.println("PUSH!");
     Push();
-    delay(3000);
+    delay(2000);
     bufferVal = GetColorBuffer();
     if(bufferVal == 2){
-      Serial.println("Disk went to somewhere else other than buffer zone!");
+      Serial.println("Disk couldn't reach the buffer zone!");
       digitalWrite(LED, HIGH);
       delay(1000);
       digitalWrite(LED, LOW);
       }
     }
-  //Pusher code here (to be updated)
-  bufferVal = GetColorBuffer();
+  }
+
+  void ArmCode(){
+     bufferVal = GetColorBuffer();
   if(bufferVal == 2){
     Serial.println("There is no disk in the buffer!");
     push = true;
@@ -217,8 +224,7 @@ void loop() {
     }
     
   }
-
-}
+    }
 
 int BinaryToDecimal(char *binary) {
   int result = 0;
@@ -230,14 +236,15 @@ int BinaryToDecimal(char *binary) {
 }
 
 int GetColorBuffer(){
+  int nothingValue = 974;
   colorValueOfTheDiskBuffer = analogRead(sensor3Pin);
   Serial.print("Value on the Buffer : ");
   Serial.println(colorValueOfTheDiskBuffer);
   delay(300);
-  if(colorValueOfTheDiskBuffer >= 970 && colorValueOfTheDiskBuffer <= 990){
+  if(colorValueOfTheDiskBuffer >= nothingValue && colorValueOfTheDiskBuffer <= (nothingValue + 10)){
     return 2; //none
-    }
-  if(colorValueOfTheDiskBuffer > 990){
+    } 
+  if(colorValueOfTheDiskBuffer > (nothingValue + 10)){
     return 0; //white
     }
   if(colorValueOfTheDiskBuffer < 800){
@@ -265,14 +272,14 @@ int GetColorPusher(){
   colorValueOfTheDiskPusher = analogRead(sensor1Pin);
   Serial.print("Value on the Pusher : ");
   Serial.println(colorValueOfTheDiskPusher);
-  if(colorValueOfTheDiskPusher > 130 && colorValueOfTheDiskPusher < 900){
-    return 2; //none
+  if(colorValueOfTheDiskPusher > 100 && colorValueOfTheDiskPusher < 970){
+    return 1; //none
     }
-  if(colorValueOfTheDiskPusher > 900){
+  if(colorValueOfTheDiskPusher > 970){
     return 0; //white
     }
   if(colorValueOfTheDiskPusher <= 130){
-    return 1; //black
+    return 2; //black
     }
 }
 
@@ -334,13 +341,14 @@ void findAndStopAtBufferZone(){
   if(controlVal == true){
     valSwitch = analogRead(baseSwitch);
     }
+  Serial.print("Switch Value: ");
   Serial.println(valSwitch);
   delay(100);
-  if(valSwitch > 150){
+  if(valSwitch > 80){
     servoBase.writeMicroseconds(1500);
     controlVal = false;
     return;
-  }else if (valSwitch <= 150){
+  }else if (valSwitch <= 80){
     servoBase.writeMicroseconds(1350);
     delay(50);
     findAndStopAtBufferZone();

@@ -2,7 +2,7 @@
 // Gripper = A2
 // Buffer = A3
 // Swtich = A4
-int sensorPin = A1;
+int sensorPin = A3;
 void setup() {
   Serial.begin(9600);
   pinMode(sensorPin, INPUT);
